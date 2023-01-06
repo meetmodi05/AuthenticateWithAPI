@@ -7,7 +7,7 @@ public class RetrofitClient {
     public static Retrofit retrofit;
     private static String AUTH_URL = "https://dummyjson.com/";
 
-    public static Retrofit getRetrofit() {
+    public static Retrofit  getRetrofit() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder().baseUrl(AUTH_URL).addConverterFactory(GsonConverterFactory.create()).build();
         }

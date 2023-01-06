@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textview.MaterialTextView;
@@ -20,7 +21,7 @@ import retrofit2.Response;
 public class Home extends AppCompatActivity {
     ListView lv1;
     MaterialTextView mtvfname, mtvlname;
-    ArrayList<RegistraionModel> registrationModelArrayList = null;
+    ArrayList<RegistraionModel> registrationModelArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,26 +34,30 @@ public class Home extends AppCompatActivity {
 
 
         SharedPreferences sharedPreferences = getSharedPreferences("spfirst", MODE_PRIVATE);
-        String fisrtname = sharedPreferences.getString("firstName", "");
+        String firstName = sharedPreferences.getString("firstName", "");
         String lastname = sharedPreferences.getString("lastName", "");
-        mtvfname.setText(fisrtname);
+        mtvfname.setText(firstName);
         mtvlname.setText(lastname);
-
+        System.out.println("++++++++++++++++++++ABC++++++++++++++++++++++++" + registrationModelArrayList);
         GetMethod getMethod = RetrofitClient.getRetrofit().create(GetMethod.class);
         Call<RegistraionModel> call = getMethod.getData();
         call.enqueue(new Callback<RegistraionModel>() {
             @Override
-            public void onResponse(Call<RegistraionModel> call, Response<RegistraionModel> response) {
+            public void onResponse(@NonNull Call<RegistraionModel> call, @NonNull Response<RegistraionModel> response) {
+
                 registrationModelArrayList = response.body().getRegistrationModelArrayList();
                 String[] names = new String[registrationModelArrayList.size()];
-                for (int i = 0; i <= registrationModelArrayList.size(); i++) {
-                    names[i] = "First Name : " + registrationModelArrayList.get(i).getFname() + "\nLast Name : " + registrationModelArrayList.get(i).getLname();
+                if (registrationModelArrayList != null) {
+                } else {
+                    for (int i = 0; i <= registrationModelArrayList.size(); i++) {
+                        names[i] = "First Name : " + registrationModelArrayList.get(i).getFname() + "\nLast Name : " + registrationModelArrayList.get(i).getLname();
+                    }
                 }
-                lv1.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, names));
+                lv1.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names));
             }
 
             @Override
-            public void onFailure(Call<RegistraionModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<RegistraionModel> call, Throwable t) {
                 Toast.makeText(Home.this, "Error Occurred....", Toast.LENGTH_SHORT).show();
                 Log.e("Error Tag", "onFailure: " + t.getLocalizedMessage());
             }
