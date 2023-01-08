@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class RegistraionModel {
     private String fname;
     private String lname;
-    public ArrayList<RegistraionModel> registrationModelArrayList;
+    private   ArrayList<RegistraionModel> registrationModelArrayList;
 
     public ArrayList<RegistraionModel> getRegistrationModelArrayList() {
-        return registrationModelArrayList;
+        return this.registrationModelArrayList;
     }
 
     public void setRegistrationModelArrayList(ArrayList<RegistraionModel> registrationModelArrayList) {
